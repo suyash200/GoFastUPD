@@ -5,15 +5,6 @@ import (
 	"errors"
 )
 
-// Packet structure
-type Packet struct {
-	Version    uint8
-	PacketType uint8
-	SeqNum     uint32
-	Length     uint16
-	Payload    []byte
-}
-
 // Marshal converts Packet struct into a byte slice
 func (p *Packet) Marshal() ([]byte, error) {
 	// Preallocate buffer size: fixed header (8 bytes) + payload
