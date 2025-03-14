@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/suyash200/GoFastUPD/client"
 	"github.com/suyash200/GoFastUPD/server"
 	"os"
 )
@@ -15,6 +16,8 @@ func main() {
 	switch os.Args[1] {
 	case "server":
 		server.StartServer()
+	case "client":
+		client.StartClient()
 	default:
 		fmt.Println("Unknown command. Use 'server' or 'client'.")
 	}

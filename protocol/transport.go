@@ -1,6 +1,7 @@
 package protocol
 
 import (
+	"fmt"
 	"net"
 )
 
@@ -21,7 +22,12 @@ func ReceivePacket(conn *net.UDPConn) (*Packet, error) {
 	if err != nil {
 		return nil, err
 	}
-	return Unmarshal(buffer[:n])
+	packet, err := Unmarshal(buffer[:n])
+	if err != nil {
+		fmt.Print("packet parsing error")
+		return nil, err
+	}
+	return packet, nil
 }
 
 // SetupUDP sets up a UDP connection (server or client)
@@ -35,4 +41,14 @@ func SetupUDP(address string, isServer bool) (*net.UDPConn, error) {
 		return net.ListenUDP("udp", udpAddr) // Bind to address for receiving
 	}
 	return net.DialUDP("udp", nil, udpAddr) // Client mode
+}
+
+func CreatePacket(packetType uint8, seqNum uint32, payload []byte) Packet {
+	return Packet{
+		Version:    1,                    // Set version dynamically if needed
+		PacketType: packetType,           // Could be DATA, ACK, etc.
+		SeqNum:     seqNum,               // Increment for each new packet
+		Length:     uint16(len(payload)), // Auto-set based on payload size
+		Payload:    payload,              // User input or generated dynamically
+	}
 }
